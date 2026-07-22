@@ -1,7 +1,6 @@
 package cpsc2150.extendedCheckers.models;
 
 import cpsc2150.extendedCheckers.util.DirectionEnum;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -79,15 +78,19 @@ public interface ICheckerBoard {
     default public boolean checkPlayerWin(Character player)
     {
         int pieces = 0;
+        HashMap<Character, Integer> counts = getPieceCounts();
 
-        if(player == 'x')
-        {
-            pieces = getPieceCounts().get('o');
+        if (counts == null) {
+            return false;
         }
 
-        if(player == 'o')
-        {
-            pieces = getPieceCounts().get('x');
+        for (Character key : counts.keySet()) {
+            if (key == null || player == null) {
+                continue;
+            }
+            if (Character.toLowerCase(key) != Character.toLowerCase(player)) {
+                pieces += counts.getOrDefault(key, 0);
+            }
         }
 
         return (pieces < 1);
